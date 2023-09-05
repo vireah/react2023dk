@@ -1,25 +1,21 @@
 import logo from './logo.svg';
 import './App.css';
+import SelectGenre from "./components/SelectGenre";
+import Counter from "./components/Counter";
+import SearchBar from "./components/SearchBar";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const handleSearch = () => {
+        console.log(`lol`);
+    }
+
+    return (
+        <div className="App">
+            <Counter></Counter>
+            <SearchBar initialQuery="Lol" onSearch={handleSearch}/>
+            <SelectGenre></SelectGenre>
+        </div>
+    );
 }
 
 export default App;
