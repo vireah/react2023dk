@@ -1,4 +1,5 @@
 import React from 'react';
+import { createElement } from "react";
 
 class Counter extends React.Component {
     constructor(props) {
@@ -17,15 +18,15 @@ class Counter extends React.Component {
     };
 
     render() {
-        return (
-            <div>
-                <h1>React Counter</h1>
-                <span >{this.state.value}</span>
-                <div>
-                    <button onClick={this.increment}>+</button>
-                    <button onClick={this.decrement}>-</button>
-                </div>
-            </div>
+        return createElement(
+            'h1',
+            null,
+            'React Counter ',
+            createElement('span', null, this.state.value),
+            createElement('div', null,
+                createElement('button', { onClick: this.decrement }, '-'),
+                createElement('button', { onClick: this.increment }, '+'),
+            ),
         );
     }
 }
