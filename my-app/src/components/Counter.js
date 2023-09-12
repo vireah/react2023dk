@@ -22,10 +22,10 @@ class Counter extends React.Component {
             'h1',
             null,
             'React Counter ',
-            createElement('span', null, this.state.value),
+            createElement('span', { 'data-testid': 'my-span' }, this.state.value),
             createElement('div', null,
-                createElement('button', { onClick: this.decrement }, '-'),
-                createElement('button', { onClick: this.increment }, '+'),
+                createElement('button', { onClick: this.decrement, 'data-testid': 'decrement'  }, '-'),
+                createElement('button', { onClick: this.increment, 'data-testid': 'increment' }, '+'),
             ),
         );
     }

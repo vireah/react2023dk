@@ -10,6 +10,7 @@ const Input = props => {
                     value={props.value}
                     placeholder={props.placeholder}
                     onChange={props.onChange}
+                    data-testid={props.dataTestid}
                 />
             </label>
         </div>
