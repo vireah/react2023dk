@@ -17,3 +17,17 @@ button {
 body {
     text-align: center;
 }
+
+.movies-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 50px;
+}
+
+.movie-tile {
+    background-color: bisque;
+    width: 350px;
+    margin: 20px;
+    border-radius: 10px;
+}
