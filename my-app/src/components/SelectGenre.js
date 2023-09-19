@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import Button from '../common/Button'
 
-function SelectGenre() {
-    const genresArray = ['ALL', 'DOCUMENTARY', 'COMEDY'];
+function SelectGenre({genresArray, onSelect}) {
+    // const genresArray = props.genresArray;
 
     const [genres, setGenres] = useState(genresArray);
     const [selectedGenre, setSelectedGenre] = useState("ALL");
@@ -13,7 +13,7 @@ function SelectGenre() {
     }
 
     const isActive = (genre) => {
-        return ((genre==selectedGenre) ?'active':'');
+        return ((genre===selectedGenre) ?'active':'');
     }
 
     return (
@@ -24,7 +24,7 @@ function SelectGenre() {
                     key={genre}
                     title={genre}
                     className={isActive(genre)}
-                    onClick={(e) => handleSelect(e)}
+                    onClick={(e) => onSelect(genre)}
                 />)}
             </div>
         </>

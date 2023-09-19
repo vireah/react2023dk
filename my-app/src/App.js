@@ -5,6 +5,8 @@ import Counter from "./components/Counter";
 import SearchBar from "./components/SearchBar";
 
 function App() {
+    const genresArray = ['ALL', 'DOCUMENTARY', 'COMEDY']
+
     const handleSearch = () => {
         console.log(`lol`);
     }
@@ -12,8 +14,8 @@ function App() {
     return (
         <div className="App">
             <Counter></Counter>
-            <SearchBar initialQuery="Lol" onSearch={handleSearch}/>
-            <SelectGenre></SelectGenre>
+            <SearchBar onSearch={handleSearch}/>
+            <SelectGenre genresArray={genresArray} onSelect={handleSelect} />
         </div>
     );
 }
