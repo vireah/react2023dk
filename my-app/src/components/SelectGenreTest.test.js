@@ -20,7 +20,7 @@ describe('Test that component highlights a selected genre passed in props', () =
         const genreElement = getByText(selectedGenre);
         fireEvent.click(genreElement);
         const genreElements = getByText(selectedGenre);
-        console.log(genreElements);
+
         expect(genreElements).toHaveClass('active');
     });
 });
