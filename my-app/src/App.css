@@ -31,3 +31,21 @@ body {
     margin: 20px;
     border-radius: 10px;
 }
+
+.dialog-overlay {
+    max-width: 500px;
+    padding: 25px;
+    position: fixed;
+    top: 75px;
+    z-index: 5;
+    max-height: calc(100% - 200px);
+    left: calc(50% - 250px);
+    display: flex;
+    flex-direction: column;
+    background-color: bisque;
+}
+
+.movie-form {
+    display: flex;
+    flex-direction: column;
+}
