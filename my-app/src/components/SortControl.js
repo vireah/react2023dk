@@ -1,19 +1,19 @@
 import React, {useState} from 'react';
+import Button from "../common/Button";
 
-const SortControl = ({ currentSelection, onSelectionChange }) => {
-    const optionArray = ['Title', 'Release Date'];
-
-    const [sortSelection, setSortSelection] = useState(currentSelection);
+const SortControl = (props) => {
+    const optionArray = ['title', 'release_date'];
 
     const handleSelectionChange = (event) => {
         const newSelection = event.target.value;
-        setSortSelection(newSelection);
+        props.onSelectionChange(newSelection);
+        console.log(newSelection);
     };
 
     return (
         <div>
             <label htmlFor="sort-by">Sort by:</label>
-            <select id="sort-by"  onChange={handleSelectionChange} defaultValue={currentSelection}>
+            <select id="sort-by"  onChange={handleSelectionChange}  dataTestid="sortControl" defaultValue={props.currentSelection}>
                 {optionArray.map((option) => (
                     <option key={option} value={option}>
                         {option}

@@ -1,28 +1,19 @@
 import React, {useState} from 'react';
 import MovieDetails from "./MovieDetails";
 
-function MovieTitle({moviesArray, onClick}) {
-    // const genresArray = props.genresArray;
-
-    const [movies, setGenres] = useState(moviesArray);
-    const [targetMovie, setTargetMovie] = useState();
-    const [showMovieDetails, setMovieDetails] = useState(false);
-
-    const handleClick = (movie) => {
-        setMovieDetails(true);
-        setTargetMovie(movie)
-        console.log(movie)
+function MovieTitle(props) {
+    const clickByMove = (movie) => {
+        props.onClickByMove(movie, 'true')
     };
 
     return (
         <>
-            {showMovieDetails && <MovieDetails  movies={movies} targetMovie={targetMovie}/>}
             <div className="movies-wrapper">
-                {movies.map((movie) => (
-                    <div onClick={(e)=> handleClick(movie.name)} key={movie.name} data-testid="movieTile" className="movie-tile">
-                        <img src={movie.imageUrl} alt={movie.name} />
-                        <h2>{movie.name}</h2>
-                        <p>{movie.releaseYear}</p>
+                {props.moviesArray.map((movie) => (
+                    <div onClick={(e)=> clickByMove(movie.title)} key={movie.title} data-testid="movieTile" className="movie-tile">
+                        <img src={movie.poster_path} alt={movie.title} />
+                        <h2>{movie.title}</h2>
+                        <p>{movie.release_date}</p>
                         <p>{movie.genres}</p>
                     </div>
                 ))}

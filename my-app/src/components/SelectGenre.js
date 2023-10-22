@@ -1,14 +1,13 @@
 import React, {useState} from 'react';
 import Button from '../common/Button'
 
-function SelectGenre({genresArray, onSelect}) {
-    // const genresArray = props.genresArray;
+function SelectGenre(props) {
+    const [genres, setGenres] = useState(props.genresArray);
+    const [selectedGenre, setSelectedGenre] = useState("Adventure");
 
-    const [genres, setGenres] = useState(genresArray);
-    const [selectedGenre, setSelectedGenre] = useState("ALL");
-
-    const handleSelect = (event) => {
+    const handleButton = (event) => {
         setSelectedGenre(event.target.innerText);
+        props.onSelect(event.target.innerText);
         console.log(event.target.innerText);
     }
 
@@ -24,7 +23,8 @@ function SelectGenre({genresArray, onSelect}) {
                     key={genre}
                     title={genre}
                     className={isActive(genre)}
-                    onClick={(e) => onSelect(genre)}
+                    dataTestid="selectGenre"
+                    onClick={(event) => handleButton(event)}
                 />)}
             </div>
         </>
