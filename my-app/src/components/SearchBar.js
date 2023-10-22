@@ -1,16 +1,19 @@
 import React, {useState} from 'react';
 import Button from '../common/Button';
 import Input from '../common/Input';
+import {Outlet, useParams} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = (props) => {
+    const navigate = useNavigate();
     const [value, setValue] = useState("")
 
     const handleChange = (event) => {
         setValue(event.target.value);
     }
 
-    const handleButton = (event) => {
-        props.onSearch(value);
+    const handleButton = () => {
+        navigate(`/?movies=&query=`+value+`&searchBy=title`);
     }
 
     // const handleKeyPress = (event) => {

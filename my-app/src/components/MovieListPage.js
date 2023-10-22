@@ -1,38 +1,51 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+// import { Outlet } from "react-router-dom";
 
 import SearchBar from "./SearchBar";
 import SortControl from "./SortControl";
 import MovieTitle from "./MovieTitle";
 import SelectGenre from "./SelectGenre";
 import MovieDetails from "./MovieDetails";
+import {Outlet, useParams, useSearchParams} from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const MovieListPage = () => {
     const genresArray = [ "Adventure", "Comedy", "Drama", "Romance" ]
+    let [searchParams, setSearchParams] = useSearchParams();
 
-    const [searchQuery, setSearchQuery] = useState("");
-    const [searchBy, setSearchBy] = useState("");
-    const [sortCriterion, setSortCriterion] = useState("title");
-    const [activeGenre, setActiveGenre] = useState("");
-    const [movieList, setMovieList] = useState([]);
-    const [selectedMovie, setSelectedMovie] = useState(null);
+    const query = searchParams.get("query");
+    const sortBy = searchParams.get("sortBy");
+    const searchBy = searchParams.get("searchBy");
 
+    const location = useLocation();
+
+    const [searchQuery, setSearchQuery] = useState(query || "");
+    const [sortByState, setSortByState] = useState();
+    const [sortCriterion, setSortCriterion] = useState(searchBy ||'title');
+    const [movieList, setMovieList] = useState();
     const [showMovieDetails, setMovieDetails] = useState(false);
 
     let source = axios.CancelToken.source();
 
     useEffect(() => {
+        const params = new URLSearchParams(location.search);
+
+        const query = params.get("query");
+        const sortBy = params.get("sortBy");
+        const genre = params.get("genre");
+        const searchBy = params.get("searchBy");
+
         axios.get('http://localhost:4000/movies', {
             params: {
-                search: searchQuery,
-                searchBy: searchBy,
-                sortBy: sortCriterion,
+                search: query,
+                searchBy: searchBy || sortCriterion,
+                sortBy: sortBy,
                 sortOrder: 'asc'
             },
             cancelToken: source.token
         }).then(response => {
-                console.log("lol works", movieList, sortCriterion);
-                setMovieList(response.data.data)
+                setMovieList(response.data)
             })
             .catch(error => {
                 if (axios.isCancel(error)) {
@@ -41,50 +54,55 @@ const MovieListPage = () => {
                     console.error(error);
                 }
             });
-    }, [searchQuery, sortCriterion]);
+    }, [query, searchBy, searchParams, location, sortBy]);
 
-
-    const handleSearch = (searchQuery) => {
-        source.cancel()
-        console.log("lol canseled")
-        setSearchBy('title');
-        setSearchQuery(searchQuery);
-    }
+    const navigate = useNavigate();
 
     const handleSelect = (searchQuery) => {
         source.cancel()
-        console.log("lol canseled")
-        setSearchBy('genres');
         setSearchQuery(searchQuery);
+        setSortCriterion("genres");
+        setSearchParams({ query: searchQuery, sortBy: 'genres' });
     }
 
-
-    const handleClickByMove = (newMovieList, showMovieDetails) => {
+    //////// Movie details
+    const handleClickByMove = (movieId, showMovieDetails) => {
         setMovieDetails(showMovieDetails);
-        setSelectedMovie(newMovieList);
+        // setSelectedMovie(newMovieList);
+        console.log(movieId)
+        const moveId = movieId;
+        // Update the URL with the new search query
+        navigate(`/${movieId}`);
     }
 
+    //////// Field to sort by
     const handleSelectionChange = (newSelection) => {
         source.cancel()
-        setSortCriterion(newSelection);
+        setSortByState(newSelection);
+        setSearchParams({ sortBy: newSelection });
     }
 
-    return (
-        <div className="App">
-            {/*<Dialog buttonName={"add Movie"}>*/}
-            {/*    <MovieForm></MovieForm>*/}
-            {/*</Dialog>*/}
-            {/*<Dialog buttonName={"Edit movie"}>*/}
-            {/*    <MovieForm initialMovieInfo={initialMovieInfo}></MovieForm>*/}
-            {/*</Dialog>*/}
-            {/*<Dialog buttonName={"Delete movie"}>Are you sure?<button >Confirm</button></Dialog>*/}
-            {showMovieDetails && <MovieDetails  movies={movieList} targetMovie={selectedMovie}/>}
-            {!showMovieDetails && <SearchBar onSearch={handleSearch} movieList={movieList}/>}
-            <SelectGenre genresArray={genresArray} onSelect={handleSelect} />
-            <SortControl currentSelection={sortCriterion} onSelectionChange={handleSelectionChange} />
-            <MovieTitle moviesArray={movieList} onClickByMove={handleClickByMove}  onClick={handleSelect}></MovieTitle>
-        </div>
-    );
+    if(movieList) {
+        return (
+            <div className="App">
+                {/*<Dialog buttonName={"add Movie"}>*/}
+                {/*    <MovieForm></MovieForm>*/}
+                {/*</Dialog>*/}
+                {/*<Dialog buttonName={"Edit movie"}>*/}
+                {/*    <MovieForm initialMovieInfo={initialMovieInfo}></MovieForm>*/}
+                {/*</Dialog>*/}
+                {/*<Dialog buttonName={"Delete movie"}>Are you sure?<button >Confirm</button></Dialog>*/}
+                {/*{showMovieDetails && <MovieDetails  movies={movieList} targetMovie={selectedMovie}/>}*/}
+                {showMovieDetails && <MovieDetails/>}
+                {/*{!showMovieDetails && <SearchBar onSearch={handleSearch} movieList={movieList}/>}*/}
+                <SelectGenre genresArray={genresArray} onSelect={handleSelect}/>
+                <SortControl currentSelection={sortCriterion} onSelectionChange={handleSelectionChange}/>
+                <MovieTitle moviesArray={movieList} onClickByMove={handleClickByMove}></MovieTitle>
+                {/*<MovieTitle moviesArray={movieList} onClickByMove={handleClickByMove}  onClick={handleSelect}></MovieTitle>*/}
+                <Outlet />
+            </div>
+        );
+    }
 };
 
 export default MovieListPage;
