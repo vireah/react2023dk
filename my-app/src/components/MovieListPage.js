@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import { Link } from "react-router-dom";
 // import { Outlet } from "react-router-dom";
 
 import SearchBar from "./SearchBar";
@@ -85,6 +86,7 @@ const MovieListPage = () => {
     if(movieList) {
         return (
             <div className="App">
+                <Link to="/new">Add New Movie</Link>
                 {/*<Dialog buttonName={"add Movie"}>*/}
                 {/*    <MovieForm></MovieForm>*/}
                 {/*</Dialog>*/}
