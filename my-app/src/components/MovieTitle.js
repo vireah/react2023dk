@@ -1,5 +1,4 @@
 import React from 'react';
-import MovieDetails from "./MovieDetails";
 
 function MovieTitle(props) {
     const clickByMove = (movieId) => {

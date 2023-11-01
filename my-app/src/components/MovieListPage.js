@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-// import { Outlet } from "react-router-dom";
 
-import SearchBar from "./SearchBar";
 import SortControl from "./SortControl";
 import MovieTitle from "./MovieTitle";
 import SelectGenre from "./SelectGenre";
@@ -28,32 +26,35 @@ const MovieListPage = () => {
 
     let source = axios.CancelToken.source();
 
-    useEffect(() => {
+    const fetchData = async () => {
         const params = new URLSearchParams(location.search);
-
         const query = params.get("query");
         const sortBy = params.get("sortBy");
         const genre = params.get("genre");
         const searchBy = params.get("searchBy");
 
-        axios.get('http://localhost:4000/movies', {
-            params: {
-                search: query,
-                searchBy: searchBy || sortCriterion,
-                sortBy: sortBy,
-                sortOrder: 'asc'
-            },
-            cancelToken: source.token
-        }).then(response => {
-                setMovieList(response.data)
-            })
-            .catch(error => {
-                if (axios.isCancel(error)) {
-                    console.log('Request canceled', error.message);
-                } else {
-                    console.error(error);
-                }
+        try {
+            const response = await axios.get('http://localhost:4000/movies', {
+                params: {
+                    search: query,
+                    searchBy: searchBy || sortCriterion,
+                    sortBy: sortBy,
+                    sortOrder: 'asc'
+                },
+                cancelToken: source.token
             });
+            setMovieList(response.data);
+        } catch (error) {
+            if (axios.isCancel(error)) {
+                console.log('Request canceled', error.message);
+            } else {
+                console.error(error);
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
     }, [query, searchBy, searchParams, location, sortBy]);
 
     const navigate = useNavigate();
@@ -68,10 +69,7 @@ const MovieListPage = () => {
     //////// Movie details
     const handleClickByMove = (movieId, showMovieDetails) => {
         setMovieDetails(showMovieDetails);
-        // setSelectedMovie(newMovieList);
-        console.log(movieId)
         const moveId = movieId;
-        // Update the URL with the new search query
         navigate(`/${movieId}`);
     }
 
@@ -85,20 +83,10 @@ const MovieListPage = () => {
     if(movieList) {
         return (
             <div className="App">
-                {/*<Dialog buttonName={"add Movie"}>*/}
-                {/*    <MovieForm></MovieForm>*/}
-                {/*</Dialog>*/}
-                {/*<Dialog buttonName={"Edit movie"}>*/}
-                {/*    <MovieForm initialMovieInfo={initialMovieInfo}></MovieForm>*/}
-                {/*</Dialog>*/}
-                {/*<Dialog buttonName={"Delete movie"}>Are you sure?<button >Confirm</button></Dialog>*/}
-                {/*{showMovieDetails && <MovieDetails  movies={movieList} targetMovie={selectedMovie}/>}*/}
                 {showMovieDetails && <MovieDetails/>}
-                {/*{!showMovieDetails && <SearchBar onSearch={handleSearch} movieList={movieList}/>}*/}
                 <SelectGenre genresArray={genresArray} onSelect={handleSelect}/>
                 <SortControl currentSelection={sortCriterion} onSelectionChange={handleSelectionChange}/>
                 <MovieTitle moviesArray={movieList} onClickByMove={handleClickByMove}></MovieTitle>
-                {/*<MovieTitle moviesArray={movieList} onClickByMove={handleClickByMove}  onClick={handleSelect}></MovieTitle>*/}
                 <Outlet />
             </div>
         );
