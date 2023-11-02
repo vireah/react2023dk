@@ -10,6 +10,7 @@ import SelectGenre from "./SelectGenre";
 import MovieDetails from "./MovieDetails";
 import {Outlet, useParams, useSearchParams} from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
+import AddMovieForm from "./AddMovieForm";
 
 const MovieListPage = () => {
     const genresArray = [ "Adventure", "Comedy", "Drama", "Romance" ]
@@ -86,7 +87,8 @@ const MovieListPage = () => {
     if(movieList) {
         return (
             <div className="App">
-                <Link to="/new">Add New Movie</Link>
+                <Link to="/new">Add Movie</Link>
+                {/*<AddMovieForm />*/}
                 {/*<Dialog buttonName={"add Movie"}>*/}
                 {/*    <MovieForm></MovieForm>*/}
                 {/*</Dialog>*/}

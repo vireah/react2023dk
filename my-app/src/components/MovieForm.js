@@ -1,79 +1,24 @@
-// import React, { useState } from 'react';
-//
-// const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
-//     const [movieInfo, setMovieInfo] = useState(initialMovieInfo);
-//     console.log("inf", movieInfo);
-//
-//     const handleInputChange = (event) => {
-//         const { name, value } = event.target;
-//         setMovieInfo((prevMovieInfo) => ({ ...prevMovieInfo, [name]: value }));
-//     };
-//
-//     const handleSubmit = (event) => {
-//         event.preventDefault();
-//         onSubmit(movieInfo);
-//     };
-//
-//     return (
-//         <form onSubmit={handleSubmit} className="movie-form">
-//             <label>
-//                 Title:
-//                 <input type="text" name="title" value={movieInfo.title || ''} onChange={handleInputChange} />
-//             </label>
-//             <br />
-//             <label>
-//                 Release date:
-//                 <input type="text" name="releaseDate" value={movieInfo.releaseDate || ''} onChange={handleInputChange} />
-//             </label>
-//             <br />
-//             <label>
-//                 Movie Url:
-//                 <input type="text" name="movieUrl" value={movieInfo.movieUrl || ''} onChange={handleInputChange} />
-//             </label>
-//             <label>
-//                 Rating:
-//                 <input type="text" name="rating" value={movieInfo.rating || ''} onChange={handleInputChange} />
-//             </label>
-//             <label>
-//                 Genre:
-//                 <input type="text" name="genre" value={movieInfo.genre || ''} onChange={handleInputChange} />
-//             </label>
-//             <label>
-//                 Runtime:
-//                 <input type="text" name="runtime" value={movieInfo.runtime || ''} onChange={handleInputChange} />
-//             </label>
-//             <label>
-//                 Overview:
-//                 <input type="text" name="overview" value={movieInfo.overview || ''} onChange={handleInputChange} />
-//             </label>
-//             <br />
-//             <button>reset</button>
-//             <button type="submit">Submit</button>
-//         </form>
-//     );
-// };
-//
-// export default MovieForm;
-
 import React from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import InputMask from 'react-input-mask';
 
-const MovieForm = ({ onSubmit }) => {
+const MovieForm = ({ onSubmit, onCloseDialog,  isEditMode, initialMovieInfo, movieId }) => {
     const navigate = useNavigate();
+    const numericMovieId = parseInt(movieId, 10);
+
     const formik = useFormik({
         initialValues: {
-            title: '',
-            release_date: '',
-            poster_path: '',
-            vote_average: '',
-            genres: '',
-            runtime: '',
-            overview: '',
-            vote_count: '',
-            revenue: '',
-            tagline: '',
+            title: initialMovieInfo?.title || '',
+            release_date: initialMovieInfo?.release_date || '',
+            poster_path: initialMovieInfo?.poster_path || '',
+            vote_average: initialMovieInfo?.vote_average || '',
+            genres: initialMovieInfo?.genres || '',
+            runtime: initialMovieInfo?.runtime || '',
+            overview: initialMovieInfo?.overview || '',
+            vote_count: initialMovieInfo?.vote_count || '',
+            revenue: initialMovieInfo?.revenue || '',
+            tagline: initialMovieInfo?.tagline || '',
         },
         validate: (values) => {
             const errors = {};
@@ -109,15 +54,15 @@ const MovieForm = ({ onSubmit }) => {
             }
             return errors;
         },
+
         onSubmit: (values) => {
-            // Convert genres to an array
+            const endpoint = isEditMode ? `http://localhost:4000/movies/` : 'http://localhost:4000/movies';
+            const method = isEditMode ? 'PUT' : 'POST';
             const genresArray = values.genres.split(',').map((genre) => genre.trim());
+            const updatedValues = { ...values, genres: genresArray, id: numericMovieId };
 
-            // Update the values object with the genres array
-            const updatedValues = { ...values, genres: genresArray };
-
-            fetch('http://localhost:4000/movies', {
-                method: 'POST',
+            fetch(endpoint, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -126,9 +71,10 @@ const MovieForm = ({ onSubmit }) => {
                 .then((response) => response.json())
                 .then((data) => {
                     console.log(data);
-                    const movieId = data.id;
-                    navigate(`/${movieId}`);
-                    // onSubmit(newMovieId);
+                    const newMovieId = data.movieId;
+                    navigate(`/`);
+                    onSubmit(newMovieId);
+                    onCloseDialog();
                 })
                 .catch((error) => {
                     console.error('Error adding the movie:', error);
@@ -219,7 +165,7 @@ const MovieForm = ({ onSubmit }) => {
             <button type="reset" onClick={formik.handleReset}>
                 Reset
             </button>
-            <button type="submit">Submit</button>
+            <button type="submit">{isEditMode ? 'Update' : 'Submit'}</button>
         </form>
     );
 };

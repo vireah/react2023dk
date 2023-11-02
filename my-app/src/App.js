@@ -9,6 +9,7 @@ import Dialog from "./components/Dialog"
 import React from "react";
 import MovieDetailsPage from "./components/MovieDetails";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
+import EditMovieForm from "./components/EditMovieForm";
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
                     <Route path="/new" element={<AddMovieForm />} />
                     <Route path="/" element={<SearchBar/>} />
                     <Route path="/:movieId" element={<MovieDetailsPage/>} />
+                    <Route path="/:movieId/edit" element={<EditMovieForm/>} />
                 </Route>
             </Routes>
         </BrowserRouter>
