@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import { Link } from "react-router-dom";
+// import { Outlet } from "react-router-dom";
 
 import SortControl from "./SortControl";
 import MovieTitle from "./MovieTitle";
@@ -7,6 +9,7 @@ import SelectGenre from "./SelectGenre";
 import MovieDetails from "./MovieDetails";
 import {Outlet, useParams, useSearchParams} from "react-router-dom";
 import { useNavigate, useLocation } from "react-router-dom";
+import AddMovieForm from "./AddMovieForm";
 
 const MovieListPage = () => {
     const genresArray = [ "Adventure", "Comedy", "Drama", "Romance" ]
@@ -83,6 +86,7 @@ const MovieListPage = () => {
     if(movieList) {
         return (
             <div className="App">
+                <Link to="/new">Add Movie</Link>
                 {showMovieDetails && <MovieDetails/>}
                 <SelectGenre genresArray={genresArray} onSelect={handleSelect}/>
                 <SortControl currentSelection={sortCriterion} onSelectionChange={handleSelectionChange}/>

@@ -3,12 +3,13 @@ import './App.css';
 import MovieListPage from "./components/MovieListPage";
 import Counter from "./components/Counter";
 import SearchBar from "./components/SearchBar";
-import MovieTitle from "./components/MovieTitle";
+import AddMovieForm from "./components/AddMovieForm";
 import SortControl from "./components/SortControl";
 import Dialog from "./components/Dialog"
 import React from "react";
 import MovieDetailsPage from "./components/MovieDetails";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
+import EditMovieForm from "./components/EditMovieForm";
 
 function App() {
 
@@ -33,8 +34,10 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<MovieListPage />} >
+                    <Route path="/new" element={<AddMovieForm />} />
                     <Route path="/" element={<SearchBar/>} />
                     <Route path="/:movieId" element={<MovieDetailsPage/>} />
+                    <Route path="/:movieId/edit" element={<EditMovieForm/>} />
                 </Route>
             </Routes>
         </BrowserRouter>

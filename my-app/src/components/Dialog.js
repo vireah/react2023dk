@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { Portal } from 'react-portal';
 
 const Dialog = ({ title, buttonName, children, onClose }) => {
-
-    const [showDialog, setShowDialog] = useState(false);
-
+    const [showDialog, setShowDialog] = useState(onClose || true);
     const handleOpenDialog = () => {
         setShowDialog(true);
     };

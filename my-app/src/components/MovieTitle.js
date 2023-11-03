@@ -1,4 +1,6 @@
 import React from 'react';
+import MovieDetails from "./MovieDetails";
+import {Link} from "react-router-dom";
 
 function MovieTitle(props) {
     const clickByMove = (movieId) => {
@@ -12,12 +14,15 @@ function MovieTitle(props) {
             <>
                 <div className="movies-wrapper">
                     {movies.map((movie) => (
-                        <div onClick={(e) => clickByMove(movie.id)} key={movie.title} data-testid="movieTile"
-                             className="movie-tile">
-                            <img src={movie.poster_path} alt={movie.title}/>
-                            <h2>{movie.title}</h2>
-                            <p>{movie.release_date}</p>
-                            <p>{movie.genres}</p>
+                        <div>
+                            <div onClick={(e) => clickByMove(movie.id)} key={movie.title} data-testid="movieTile"
+                                 className="movie-tile">
+                                <img src={movie.poster_path} alt={movie.title}/>
+                                <h2>{movie.title}</h2>
+                                <p>{movie.release_date}</p>
+                                <p>{movie.genres}</p>
+                            </div>
+                            <Link to={`/${movie.id}/edit`}>Edit</Link>
                         </div>
                     ))}
                 </div>
