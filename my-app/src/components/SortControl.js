@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Button from "../common/Button";
 
 const SortControl = (props) => {
     const optionArray = ['title', 'release_date'];
@@ -7,7 +6,6 @@ const SortControl = (props) => {
     const handleSelectionChange = (event) => {
         const newSelection = event.target.value;
         props.onSelectionChange(newSelection);
-        console.log(newSelection);
     };
 
     return (

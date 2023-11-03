@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 const MovieForm = ({ initialMovieInfo = {}, onSubmit }) => {
     const [movieInfo, setMovieInfo] = useState(initialMovieInfo);
-    console.log("inf", movieInfo);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
